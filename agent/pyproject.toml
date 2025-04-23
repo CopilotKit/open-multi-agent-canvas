@@ -4,11 +4,14 @@ version = "0.1.0"
 description = "Starter"
 authors = ["Markus Ecker <markus.ecker@gmail.com>"]
 license = "MIT"
-packages = [{include = "mcp-agent"}]
+packages = [{include = "mcp_agent"}]
+
+[tool.poetry.group.dev.dependencies]
+autoflake = "^2.3.1"
 
 [project]
 name = "mcp-agent"
-version = "0.0.1"
+version = "0.1.0"
 dependencies = [
     "langchain-openai>=0.2.1",
     "langchain-anthropic>=0.2.1",
@@ -22,7 +25,8 @@ dependencies = [
     "langgraph-cli[inmem]>=0.1.64",
     "langchain-mcp-adapters>=0.0.3",
     "fastmcp>=0.4.1",
-    "langgraph>=0.3.5"
+    "langgraph (>=0.3.31,<0.4.0)",
+    "langgraph-checkpoint (>=2.0.24,<3.0.0)"
 ]
 
 [build-system]
@@ -44,6 +48,11 @@ langgraph-cli = {extras = ["inmem"], version = "^0.1.64"}
 langchain-mcp-adapters = "^0.0.3"
 fastmcp = "^0.4.1"
 langgraph = "^0.3.5"
+litellm = "^1.43.12"
+mem0ai = "^0.1.17"
+pydantic = "^2.8.2"
+logfire = "^0.19.0"
 
 [tool.poetry.scripts]
-demo = "mcp-agent.demo:main"
+demo = "mcp_agent.run_server:main"
+custom-server = "mcp_agent.custom_server_entry:run_custom_server"

@@ -1,11 +1,14 @@
 "use client";
-import { useCoAgent } from "@copilotkit/react-core";
 import { createContext, useContext, useRef } from "react";
-import { AvailableAgents } from "@/lib/available-agents";
-import { ResearchAgentState } from "./agents/researcher";
-import { MCPAgentState } from "./agents/mcp-agent";
-import { MCP_STORAGE_KEY, ServerConfig } from "@/lib/mcp-config-types";
+import { useCoAgent } from "@copilotkit/react-core";
 import { useLocalStorage } from "@/hooks/use-local-storage";
+import { AvailableAgents } from "@/lib/available-agents";
+import type { ServerConfig } from "@/lib/mcp-config-types";
+import { MCP_STORAGE_KEY } from "@/lib/mcp-config-types";
+import type { KnowledgeAgentState } from "./agents/knowledge-agent";
+import type { MCPAgentState } from "./agents/mcp-agent";
+import type { ResearchAgentState } from "./agents/researcher";
+
 
 /**
  * Base Agent State
@@ -73,25 +76,33 @@ export interface Log {
 }
 
 export const AgentsContext = createContext<
-  Array<TravelAgentState | ResearchAgentState | MCPAgentState>
+  Array<TravelAgentState | ResearchAgentState | MCPAgentState | KnowledgeAgentState>
 >([]);
 
 /**
  * This provider wraps state from all agents
  */
-export const CoAgentsProvider = ({
+export function CoAgentsProvider({
   children,
 }: {
   children: React.ReactNode;
-}) => {
+}) {
+  // Default backend configuration
+  const defaultConfig: Record<string, ServerConfig> = {
+    "mcp-agent": {
+      url: process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8123",
+      transport: "sse"
+    }
+  };
+
   // Use ref to avoid re-rendering issues
-  const configsRef = useRef<Record<string, ServerConfig>>({});
-  
+  const configsRef = useRef<Record<string, ServerConfig>>(defaultConfig);
+
   // Get saved MCP configurations from localStorage
-  const [savedConfigs] = useLocalStorage<Record<string, ServerConfig>>(MCP_STORAGE_KEY, {});
-  
+  const [savedConfigs] = useLocalStorage<Record<string, ServerConfig>>(MCP_STORAGE_KEY, defaultConfig);
+
   // Set the ref value once we have the saved configs
-  if (Object.keys(savedConfigs).length > 0 && Object.keys(configsRef.current).length === 0) {
+  if (Object.keys(savedConfigs).length > 0) {
     configsRef.current = savedConfigs;
   }
 
@@ -119,6 +130,16 @@ export const CoAgentsProvider = ({
     },
   });
 
+  const { state: knowledgeAgentState } = useCoAgent({
+    name: AvailableAgents.KNOWLEDGE_AGENT,
+    initialState: {
+      query: "",
+      entities: [],
+      relations: [],
+      logs: [],
+    },
+  });
+
   return (
     <AgentsContext.Provider
       value={[
@@ -134,12 +155,16 @@ export const CoAgentsProvider = ({
           ...mcpAgentState,
           __name__: AvailableAgents.MCP_AGENT,
         },
+        {
+          ...knowledgeAgentState,
+          __name__: AvailableAgents.KNOWLEDGE_AGENT,
+        },
       ]}
     >
       {children}
     </AgentsContext.Provider>
   );
-};
+}
 
 export const useCoAgents = () => {
   const context = useContext(AgentsContext);

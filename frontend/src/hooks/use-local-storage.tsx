@@ -53,7 +53,7 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T)
     } else if (storedValue !== initialValue) {
       window.localStorage.setItem(key, JSON.stringify(storedValue));
     }
-  }, [key, initialValue]);
+  }, [key, initialValue, storedValue]);
 
   return [storedValue, setValue];
 }

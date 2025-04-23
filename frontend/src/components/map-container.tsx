@@ -1,22 +1,27 @@
 "use client";
-import * as Skeletons from "@/components/skeletons";
-import { Button } from "@/components/ui/button";
-import { AvailableAgents } from "@/lib/available-agents";
+
+import { useRef, useState } from "react";
+
 import { useCoAgent, useCopilotAction } from "@copilotkit/react-core";
-import { Icon, LatLngTuple } from "leaflet";
+import type { LatLngTuple } from "leaflet";
+import { Icon } from "leaflet";
+import { CheckCircle, Loader2, XCircle, MapPin, Star } from "lucide-react";
+import dynamic from "next/dynamic";
+import { Marker, Popup, TileLayer } from "react-leaflet";
 import "leaflet-defaulticon-compatibility";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
 import "leaflet/dist/leaflet.css";
-import { CheckCircle, Loader2, XCircle } from "lucide-react";
-import dynamic from "next/dynamic";
-import { useRef, useState } from "react";
-import { Marker, Popup, TileLayer } from "react-leaflet";
+
+import * as Skeletons from "@/components/skeletons";
+import { Button } from "@/components/ui/button";
+import { AvailableAgents } from "@/lib/available-agents";
+import { cn } from "@/lib/utils";
 
 const customIcon = new Icon({
-  iconUrl: "/icon.png",
+  iconUrl: "/map-marker.svg",
   iconSize: [40, 40],
-  iconAnchor: [12, 25],
-  popupAnchor: [0, -25],
+  iconAnchor: [20, 20],
+  popupAnchor: [0, -20],
 });
 
 interface Place {
@@ -41,7 +46,7 @@ export default function MapComponent() {
   const [center, setCenter] = useState<LatLngTuple>([0, 0]);
   const hasProcessedTrips = useRef(false);
   const hasInProgress = useRef(false);
-  
+
   const researchAgentActive = useRef(false);
   const { running: researchAgentRunning } = useCoAgent({
     name: AvailableAgents.RESEARCH_AGENT,
@@ -201,25 +206,44 @@ export default function MapComponent() {
                     {trip.places?.map((place) => (
                       <div
                         key={place.id}
-                        className="bg-white p-4 rounded-md shadow-sm"
+                        className="bg-card p-4 rounded-lg border border-border shadow-sm hover-lift transition-all-normal animate-fade-in"
+                        style={{ animationDelay: `${parseInt(place.id) * 100}ms` }}
                       >
-                        <h4 className="font-medium text-gray-800">
-                          {place.name}
-                        </h4>
-                        <p className="text-sm text-gray-600 mt-1">
-                          {place.address}
-                        </p>
-                        <div className="flex items-center mt-2">
-                          <span className="text-yellow-500">
-                            {"★".repeat(Math.round(place.rating))}
-                          </span>
-                          <span className="text-gray-400">
-                            {"★".repeat(5 - Math.round(place.rating))}
-                          </span>
+                        <div className="flex items-start gap-3">
+                          <div className="w-8 h-8 rounded-full bg-[hsl(var(--agent-travel))]/10 flex items-center justify-center flex-shrink-0 mt-1">
+                            <MapPin className="h-4 w-4 text-[hsl(var(--agent-travel))]" />
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="font-medium text-foreground">
+                              {place.name}
+                            </h4>
+                            <p className="text-sm text-muted-foreground mt-1">
+                              {place.address}
+                            </p>
+                            <div className="flex items-center mt-2">
+                              <div className="flex items-center gap-1">
+                                <Star className="h-3.5 w-3.5 text-amber-500" />
+                                <span className="text-sm font-medium">{place.rating.toFixed(1)}</span>
+                              </div>
+                              <div className="flex ml-2">
+                                {Array.from({ length: 5 }).map((_, i) => (
+                                  <Star
+                                    key={i}
+                                    className={cn(
+                                      "h-3.5 w-3.5",
+                                      i < Math.round(place.rating)
+                                        ? "text-amber-500 fill-amber-500"
+                                        : "text-muted stroke-muted-foreground/40"
+                                    )}
+                                  />
+                                ))}
+                              </div>
+                            </div>
+                            <p className="text-sm text-foreground/90 mt-2">
+                              {place.description}
+                            </p>
+                          </div>
                         </div>
-                        <p className="text-sm text-gray-700 mt-2">
-                          {place.description}
-                        </p>
                       </div>
                     ))}
                   </div>
@@ -231,7 +255,7 @@ export default function MapComponent() {
             <div className="w-full flex items-center justify-between px-8 py-4">
               <Button
                 variant="default"
-                className="flex-1 flex items-center justify-center space-x-2 bg-green-500 hover:bg-green-600 text-white"
+                className="flex-1 flex items-center justify-center gap-2 bg-[hsl(var(--agent-travel))] hover:bg-[hsl(var(--agent-travel))]/90 text-white transition-all-fast hover-scale"
                 onClick={() => {
                   respond?.("SEND");
                   setTimeout(() => {
@@ -243,10 +267,13 @@ export default function MapComponent() {
                 <span>Confirm</span>
               </Button>
               <Button
-                variant="destructive"
-                className="flex-1 mx-4 flex items-center justify-center space-x-2 px-4 py-2 hover:bg-red-600 focus:outline-none text-white bg-red-500"
+                variant="outline"
+                className="flex-1 mx-4 flex items-center justify-center gap-2 border-[hsl(var(--agent-travel))] text-[hsl(var(--agent-travel))] hover:bg-[hsl(var(--agent-travel))]/10 transition-all-fast hover-scale"
                 onClick={() => {
                   respond?.("CANCEL");
+                  setTimeout(() => {
+                    stopTravelAgent();
+                  }, 3000);
                 }}
               >
                 <XCircle className="h-5 w-5" />
@@ -334,9 +361,9 @@ export default function MapComponent() {
   // Show map with points
   return (
     <div style={{ height: "100vh", width: "100%", position: "relative" }}>
-      <Map 
-        center={center} 
-        zoom={13} 
+      <Map
+        center={center}
+        zoom={13}
         style={{ height: "100%", width: "100%" }}
         className="leaflet-container"
       >

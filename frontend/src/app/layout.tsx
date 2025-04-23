@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
+
 import "./globals.css";
 import Providers from "@/providers/Providers";
 
@@ -14,8 +15,12 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Open Multi-Agent Canvas",
-  description: "Open Multi-Agent Canvas by CopilotKit",
+  title: "Multi-Agent Canvas",
+  description: "A powerful multi-agent chat interface for specialized AI assistants",
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/logo.svg",
+  },
 };
 
 export default function RootLayout({
@@ -26,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}
+        className={`${inter.variable} ${jetbrainsMono.variable} antialiased bg-background text-foreground transition-colors duration-300`}
       >
         <Providers>{children}</Providers>
       </body>

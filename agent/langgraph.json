@@ -3,7 +3,7 @@
   "dockerfile_lines": [],
   "dependencies": ["."],
   "graphs": {
-    "mcp-agent": "./mcp-agent/agent.py:graph"
+    "mcp-agent": "./mcp_agent/agent.py:graph"
   },
   "env": ".env"
 }
