@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// Define your models here
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  sessions  Session[]
+  entities  Entity[]
+  relations Relation[]
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model Entity {
+  id         String     @id @default(uuid())
+  name       String
+  type       String
+  properties Json       @default("{}")
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  userId     String
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fromRelations Relation[] @relation("FromEntity")
+  toRelations   Relation[] @relation("ToEntity")
+}
+
+model Relation {
+  id         String   @id @default(uuid())
+  type       String
+  properties Json     @default("{}")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  fromEntityId String
+  toEntityId   String
+  fromEntity   Entity  @relation("FromEntity", fields: [fromEntityId], references: [id], onDelete: Cascade)
+  toEntity     Entity  @relation("ToEntity", fields: [toEntityId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

@@ -1,0 +1,43 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Fullstack Best Practices Rule
+
+To ensure a complete, bug-free app across both frontend and backend, follow these unified guidelines:
+
+## Project Structure
+- Frontend code is in [`/frontend`](mdc:frontend/README.md), with main logic in [`src/app/`](mdc:frontend/src/app) and components in [`src/components/`](mdc:frontend/src/components).
+- Backend agent code is in [`/agent`](mdc:agent/README.md), with main logic in .@`mcp_agent\agents.py`.
+
+## Code Quality
+- Use TypeScript for frontend and type hints for backend Python.
+- Write JSDoc (frontend) and docstrings (backend) for all functions and classes.
+- Use camelCase for variables and PascalCase for components/classes.
+- Prefer async/await for all asynchronous logic.
+- Keep components, functions, and modules small and focused.
+
+## Extensibility
+- Register new agents and tools via config files ([`src/lib/available-agents.ts`](mdc:frontend/src/lib/available-agents.ts) for frontend, `MCPConfig` for backend).
+- Add new features as new components, hooks, or workflow nodes—avoid modifying existing logic unless necessary.
+- Use context providers (frontend) and state classes (backend) for global/shared state.
+
+## Testing & Debugging
+- Test all new features in both development and production builds.
+- Use React Query Devtools and CopilotKit Dev Console (frontend) and log tool/agent responses (backend).
+- Validate all forms and user input.
+- Add unit/integration tests for critical workflows.
+
+## Documentation
+- Update [`README.md`](mdc:frontend/README.md) and [`README.md`](mdc:agent/README.md) with any major changes or new features.
+- Document new agents, tools, memory backends, or workflow nodes inline and in the README.
+
+## Backward Compatibility
+- Default to existing config and memory if new features/settings are not provided.
+- Never remove or rename existing config fields without a migration path.
+- Test all changes with existing workflows before merging.
+
+## Summary
+Following these rules will help maintain a robust, extensible, and bug-resistant fullstack codebase.
+

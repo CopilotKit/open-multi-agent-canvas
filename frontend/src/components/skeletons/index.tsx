@@ -1,76 +1,63 @@
-import { FC } from "react";
-import { Skeleton } from "../ui/skeleton";
+import type { FC } from "react";
+
+import Image from "next/image";
+
+import { LoadingAnimation, LoadingCard, LoadingDots, LoadingProgress } from "../ui/loading-animation";
 
 export const EmailSkeleton: FC = () => (
-  <div className="space-y-4">
-    <Skeleton className="h-8 w-full" />
-    <div className="space-y-2">
-      <Skeleton className="h-4 w-[90%]" />
-      <Skeleton className="h-4 w-3/4" />
-      <Skeleton className="h-4 w-[85%]" />
+  <div className="space-y-4 animate-fade-in">
+    <LoadingCard className="animate-fade-in" rows={4} />
+  </div>
+);
+
+
+
+export const EmailListSkeleton: FC = () => (
+  <div className="flex flex-col items-center justify-center h-full space-y-8 animate-fade-in">
+    <LoadingAnimation size="lg" className="text-primary" />
+    <div className="text-center space-y-2">
+      <h3 className="text-lg font-medium">Loading Agent Interface</h3>
+      <p className="text-sm text-muted-foreground">Preparing your experience...</p>
+      <div className="w-48 mx-auto mt-4">
+        <LoadingProgress indeterminate className="mt-2" />
+      </div>
     </div>
   </div>
 );
 
-export const EmailListSkeleton: FC = () => (
-  <div className="space-y-4">
-    {Array.from({ length: 5 }).map((_, idx) => (
-      <div
-        key={idx}
-        className="flex items-center gap-4 p-4 hover:bg-gray-50 cursor-pointer"
-      >
-        <Skeleton className="h-12 w-12 rounded-full" />
-        <div className="space-y-2 flex-1">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Skeleton className="h-4 w-32" /> {/* Sender name */}
-              <Skeleton className="h-3 w-24" /> {/* Time */}
-            </div>
-            <Skeleton className="h-3 w-3 rounded-full" />{" "}
-            {/* Unread indicator */}
-          </div>
-          <Skeleton className="h-4 w-3/4" /> {/* Subject */}
-          <Skeleton className="h-3 w-4/5" /> {/* Preview text */}
-        </div>
-        <div className="flex flex-col items-center gap-2">
-          <Skeleton className="h-4 w-4" /> {/* Star/flag */}
-          <Skeleton className="h-3 w-8" /> {/* Attachment */}
-        </div>
-      </div>
-    ))}
-  </div>
-);
-
 export const ResearchPaperSkeleton: FC = () => (
-  <div className="space-y-8 mt-14">
+  <div className="space-y-8 mt-8 animate-fade-in">
+    <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center gap-2">
+        <div className="w-8 h-8 rounded-full bg-[hsl(var(--agent-research))] flex items-center justify-center text-white">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        </div>
+        <h2 className="text-xl font-semibold">Research in Progress</h2>
+      </div>
+      <LoadingProgress indeterminate className="w-32" />
+    </div>
+
     {/* Title */}
     <div className="prose max-w-none">
-      <Skeleton className="h-10 w-3/4" />
+      <LoadingCard className="mb-6" rows={1} />
     </div>
 
     {/* Sections */}
     <div className="space-y-6">
       {Array.from({ length: 3 }).map((_, i) => (
-        <div key={i} className="prose max-w-none">
-          <Skeleton className="h-8 w-1/3 mb-4" /> {/* Section title */}
-          <div className="space-y-2">
-            {Array.from({ length: 4 }).map((_, idx) => (
-              <Skeleton key={idx} className="h-4 w-full" />
-            ))}
-          </div>
-        </div>
+        <LoadingCard key={i} className="animate-fade-in" rows={3} />
       ))}
     </div>
 
     {/* Sources */}
     <div className="prose max-w-none mt-8 pt-6 border-t">
-      <Skeleton className="h-6 w-32 mb-4" /> {/* Sources title */}
+      <h3 className="text-lg font-medium mb-4 flex items-center gap-2">
+        <span>Sources</span>
+        <LoadingDots size="sm" />
+      </h3>
       <div className="space-y-4">
-        {Array.from({ length: 3 }).map((_, idx) => (
-          <div key={idx} className="space-y-2">
-            <Skeleton className="h-4 w-2/3" /> {/* Source title */}
-            <Skeleton className="h-4 w-full" /> {/* Source content */}
-          </div>
+        {Array.from({ length: 2 }).map((_, idx) => (
+          <LoadingCard key={idx} className="animate-fade-in" rows={2} />
         ))}
       </div>
     </div>
@@ -78,44 +65,89 @@ export const ResearchPaperSkeleton: FC = () => (
 );
 
 export const XKCDSkeleton: FC = () => (
-  <div className="space-y-4 flex flex-col items-center">
-    <div className="relative w-[500px] h-[500px]">
-      <Skeleton className="h-full w-full" />
-      <div className="absolute top-4 right-4">
-        <Skeleton className="h-8 w-32" /> {/* For the speed/function display */}
+  <div className="space-y-4 flex flex-col items-center animate-fade-in">
+    <div className="relative w-[500px] h-[500px] rounded-lg border border-border overflow-hidden">
+      <div className="absolute inset-0 bg-card/50 backdrop-blur-sm flex items-center justify-center">
+        <LoadingAnimation size="lg" className="text-primary" />
+      </div>
+      <div className="absolute top-4 right-4 bg-card/80 backdrop-blur-sm rounded-md px-3 py-1.5">
+        <LoadingDots />
       </div>
     </div>
     <div className="flex gap-4">
-      <Skeleton className="h-10 w-24" /> {/* Prev button */}
-      <Skeleton className="h-10 w-24" /> {/* Next button */}
+      <div className="h-10 w-24 rounded-md border border-border flex items-center justify-center text-muted-foreground">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      </div>
+      <div className="h-10 w-24 rounded-md border border-border flex items-center justify-center text-muted-foreground">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+      </div>
     </div>
   </div>
 );
 
 export const ChatSkeleton: FC = () => (
-  <div className="space-y-4">
-    <Skeleton className="h-8 w-full" />
-    <Skeleton className="h-24 w-full" />
-    <Skeleton className="h-24 w-full" />
-    <Skeleton className="h-24 w-full" />
-    <Skeleton className="h-12 w-full" />
-    <Skeleton className="h-12 w-full" />
-  </div>
-);
+  <div className="space-y-4 animate-fade-in">
+    <div className="bg-card p-3 border border-border rounded-lg flex items-center justify-between">
+      <div className="flex items-center space-x-2">
+        <div className="w-3 h-3 rounded-full bg-primary animate-pulse-subtle"></div>
+        <h3 className="font-medium text-sm">Chat Loading</h3>
+      </div>
+      <LoadingDots size="sm" />
+    </div>
 
-export const GenericSkeleton: FC = () => (
-  <div className="w-full h-screen animate-pulse p-4 flex flex-col items-center justify-center">
-    {/* Loading blocks */}
-    <div className="w-full h-full flex items-center justify-center">
-      <Skeleton className="h-48 w-48 bg-[url('/icon.png')] bg-center bg-no-repeat bg-contain opacity-20 rounded-lg shadow-lg animate-[fly-away_2s_ease-in-out_infinite]" />
+    <div className="space-y-4 p-4 border border-border rounded-lg">
+      <div className="flex items-start gap-3">
+        <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></svg>
+        </div>
+        <div className="flex-1">
+          <LoadingCard rows={2} />
+        </div>
+      </div>
+
+      <div className="flex items-start gap-3">
+        <div className="w-8 h-8 rounded-full bg-secondary/20 flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div className="flex-1">
+          <LoadingCard rows={3} />
+        </div>
+      </div>
+    </div>
+
+    <div className="relative">
+      <div className="h-12 border border-border rounded-lg px-4 py-3 flex items-center justify-between">
+        <span className="text-muted-foreground text-sm">Type your message here...</span>
+        <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+        </div>
+      </div>
     </div>
   </div>
 );
 
+export const GenericSkeleton: FC = () => (
+  <div className="w-full h-screen p-4 flex flex-col items-center justify-center animate-fade-in">
+    <div className="relative w-24 h-24 mb-6 animate-float">
+      <Image src="/logo.svg" alt="Multi-Agent Canvas" width={96} height={96} className="w-full h-full animate-glow" />
+    </div>
+    <LoadingDots size="lg" className="mb-4" />
+    <p className="text-sm text-muted-foreground">Loading experience...</p>
+  </div>
+);
+
 export const MapSkeleton: FC = () => (
-  <div className="w-full h-full relative">
-    <div className="absolute inset-0">
-      <div className="w-full h-full bg-[url('/map-overlay.png')] bg-cover bg-center bg-no-repeat" />
+  <div className="w-full h-full relative animate-fade-in">
+    <div className="absolute inset-0 bg-card/50 backdrop-blur-sm rounded-lg border border-border overflow-hidden">
+      <div className="w-full h-full bg-[url('/map-overlay.svg')] bg-cover bg-center bg-no-repeat opacity-20" />
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <div className="w-8 h-8 rounded-full bg-[hsl(var(--agent-travel))] flex items-center justify-center text-white mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <h3 className="text-lg font-medium mb-2">Loading Map</h3>
+        <p className="text-sm text-muted-foreground mb-4">Preparing your travel experience</p>
+        <LoadingProgress indeterminate className="w-48" />
+      </div>
     </div>
   </div>
 );

@@ -1,0 +1,26 @@
+---
+description: use context7
+globs: 
+alwaysApply: false
+---
+# Context7 MCP Tool Usage Rule
+
+When using the context7 MCP tool, especially the `get-library-docs` action, always set the `tokens` parameter to **5000 or greater**. This is required to avoid errors and ensure successful documentation retrieval.
+
+## Example (Correct Usage)
+
+```json
+{
+  "context7CompatibleLibraryID": "/mem0ai/mem0",
+  "tokens": 5000
+}
+```
+
+## Best Practices
+- Never set `tokens` below 5000 for `get-library-docs`.
+- If specifying a topic, include it as a string, but always set `tokens` to at least 5000.
+- Update any tool call templates or scripts to default to `tokens: 5000` or higher.
+
+## Reference
+This rule is enforced to comply with the requirements of the context7 MCP tool and prevent repeated errors in documentation retrieval.
+
