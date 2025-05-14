@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/copilotkit-open-multi-agent-canvas-badge.png)](https://mseep.ai/app/copilotkit-open-multi-agent-canvas)
+
 
 
 <div align="center">
