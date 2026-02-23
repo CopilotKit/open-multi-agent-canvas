@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useCoAgent } from "@copilotkit/react-core";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { ConnectionType, ServerConfig, MCP_STORAGE_KEY } from "@/lib/mcp-config-types";
-import { X, Plus, Server, Globe, Trash2 } from "lucide-react";
+import { X, Plus, Server, Globe, Trash2, Loader2 } from "lucide-react";
 import { AvailableAgents } from "@/lib/available-agents";
 
 // External link icon component
@@ -80,6 +80,14 @@ export function MCPConfigModal({ isOpen, onClose }: MCPConfigModalProps) {
   const [url, setUrl] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [showAddServerForm, setShowAddServerForm] = useState(false);
+  
+  const [testResults, setTestResults] = useState<Record<string, {
+    success: boolean;
+    message: string;
+    timestamp: number;
+  }>>({});
+  
+  const [testingServer, setTestingServer] = useState<string | null>(null);
 
   // Calculate server statistics
   const totalServers = Object.keys(configs).length;
@@ -129,6 +137,97 @@ export function MCPConfigModal({ isOpen, onClose }: MCPConfigModalProps) {
     const newConfigs = { ...configs };
     delete newConfigs[name];
     setConfigs(newConfigs);
+    
+    // Also remove test result for this server
+    const newTestResults = { ...testResults };
+    delete newTestResults[name];
+    setTestResults(newTestResults);
+  };
+  
+  const testServer = async (name: string, config: ServerConfig) => {
+    setTestingServer(name);
+    
+    try {
+      if (config.transport === "stdio") {
+        // For stdio servers, we can only validate the configuration format
+        // since we can't execute commands from the browser
+        if (config.command) {
+          setTestResults(prev => ({
+            ...prev,
+            [name]: {
+              success: true,
+              message: "Server configuration is valid! (Note: Command execution can only be tested in runtime)",
+              timestamp: Date.now(),
+            },
+          }));
+        } else {
+          setTestResults(prev => ({
+            ...prev,
+            [name]: {
+              success: false,
+              message: "Command is required for stdio server",
+              timestamp: Date.now(),
+            },
+          }));
+        }
+      } else if (config.transport === "sse") {
+        // Test sse server by sending a simple request
+        try {
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 5000);
+          
+          const response = await fetch(config.url, {
+            method: "GET",
+            headers: {
+              "Accept": "text/event-stream",
+            },
+            signal: controller.signal,
+          });
+          
+          clearTimeout(timeoutId);
+          
+          if (response.ok) {
+            setTestResults(prev => ({
+              ...prev,
+              [name]: {
+                success: true,
+                message: "Server test successful!",
+                timestamp: Date.now(),
+              },
+            }));
+          } else {
+            setTestResults(prev => ({
+              ...prev,
+              [name]: {
+                success: false,
+                message: `Server returned error: ${response.status} ${response.statusText}`,
+                timestamp: Date.now(),
+              },
+            }));
+          }
+        } catch (error) {
+          setTestResults(prev => ({
+            ...prev,
+            [name]: {
+              success: false,
+              message: `Connection failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+              timestamp: Date.now(),
+            },
+          }));
+        }
+      }
+    } catch (error) {
+      setTestResults(prev => ({
+        ...prev,
+        [name]: {
+          success: false,
+          message: `Test failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+          timestamp: Date.now(),
+        },
+      }));
+    } finally {
+      setTestingServer(null);
+    }
   };
 
   if (!isOpen) return null;
@@ -201,46 +300,84 @@ export function MCPConfigModal({ isOpen, onClose }: MCPConfigModalProps) {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {Object.entries(configs).map(([name, config]) => (
-                <div
-                  key={name}
-                  className="border rounded-md overflow-hidden bg-white shadow-sm"
-                >
-                  <div className="p-4">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <h3 className="font-semibold">{name}</h3>
-                        <div className="inline-flex items-center px-2 py-0.5 bg-gray-100 text-xs rounded mt-1">
-                          {config.transport === "stdio" ? (
-                            <Server className="w-3 h-3 mr-1" />
-                          ) : (
-                            <Globe className="w-3 h-3 mr-1" />
-                          )}
-                          {config.transport}
+              {Object.entries(configs).map(([name, config]) => {
+                const testResult = testResults[name];
+                const isTesting = testingServer === name;
+                
+                return (
+                  <div
+                    key={name}
+                    className="border rounded-md overflow-hidden bg-white shadow-sm"
+                  >
+                    <div className="p-4">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h3 className="font-semibold">{name}</h3>
+                          <div className="inline-flex items-center px-2 py-0.5 bg-gray-100 text-xs rounded mt-1">
+                            {config.transport === "stdio" ? (
+                              <Server className="w-3 h-3 mr-1" />
+                            ) : (
+                              <Globe className="w-3 h-3 mr-1" />
+                            )}
+                            {config.transport}
+                          </div>
+                        </div>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => testServer(name, config)}
+                            disabled={isTesting}
+                            className={`px-2 py-1 text-xs rounded flex items-center gap-1 ${
+                              isTesting
+                                ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                                : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+                            }`}
+                          >
+                            {isTesting ? (
+                              <Loader2 className="w-3 h-3 animate-spin" />
+                            ) : (
+                              'Test'
+                            )}
+                          </button>
+                          <button
+                            onClick={() => removeConfig(name)}
+                            className="text-gray-400 hover:text-red-500"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
                         </div>
                       </div>
-                      <button
-                        onClick={() => removeConfig(name)}
-                        className="text-gray-400 hover:text-red-500"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                    <div className="mt-3 text-sm text-gray-600">
-                      {config.transport === "stdio" ? (
-                        <>
-                          <p>Command: {config.command}</p>
-                          <p className="truncate">
-                            Args: {config.args.join(" ")}
-                          </p>
-                        </>
-                      ) : (
-                        <p className="truncate">URL: {config.url}</p>
+                      <div className="mt-3 text-sm text-gray-600">
+                        {config.transport === "stdio" ? (
+                          <>
+                            <p>Command: {config.command}</p>
+                            <p className="truncate">
+                              Args: {config.args.join(" ")}
+                            </p>
+                          </>
+                        ) : (
+                          <p className="truncate">URL: {config.url}</p>
+                        )}
+                      </div>
+                      
+                      {/* Test Result */}
+                      {testResult && (
+                        <div className={`mt-3 p-2 rounded text-xs ${
+                          testResult.success
+                            ? 'bg-green-100 text-green-700'
+                            : 'bg-red-100 text-red-700'
+                        }`}>
+                          <div className="flex justify-between items-center">
+                            <span>{testResult.message}</span>
+                            <span className="opacity-70">
+                              {new Date(testResult.timestamp).toLocaleTimeString()}
+                            </span>
+                          </div>
+                        </div>
                       )}
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
 
