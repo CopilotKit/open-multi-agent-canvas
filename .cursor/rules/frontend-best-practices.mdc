@@ -1,0 +1,46 @@
+---
+description: frontend, ui.
+globs: 
+alwaysApply: false
+---
+# Frontend Best Practices Rule
+
+To ensure robust, bug-free development in the frontend (`/frontend`), follow these guidelines:
+
+## Project Structure
+- Main app entry and routing are in [`src/app/`](mdc:frontend/src/app).
+- Reusable UI components are in [`src/components/ui/`](mdc:frontend/src/components/ui).
+- Agent-specific UIs are in [`src/components/agents/`](mdc:frontend/src/components/agents).
+- Global state providers are in [`src/providers/`](mdc:frontend/src/providers).
+- Custom hooks are in [`src/hooks/`](mdc:frontend/src/hooks).
+- Utility functions and agent config types are in [`src/lib/`](mdc:frontend/src/lib).
+
+## Code Quality
+- Use TypeScript for all files to ensure type safety.
+- Write JSDoc comments for all functions and components.
+- Use camelCase for variables and PascalCase for components/classes.
+- Prefer async/await for asynchronous logic.
+- Use React context for global state management.
+- Keep components small and focused; extract logic into hooks when possible.
+
+## UI/UX
+- Use Tailwind CSS for styling; avoid inline styles.
+- Ensure all UI is responsive and mobile-friendly.
+- Use skeletons/loading states from [`src/components/skeletons/`](mdc:frontend/src/components/skeletons) for async data.
+
+## Extensibility
+- Register new agents in [`src/lib/available-agents.ts`](mdc:frontend/src/lib/available-agents.ts).
+- Add new agent UIs in [`src/components/agents/`](mdc:frontend/src/components/agents).
+- Use the agent/team creation UI (planned) for dynamic agent management.
+
+## Testing & Debugging
+- Test all new features in both development and production builds.
+- Use React Query Devtools and CopilotKit Dev Console for debugging.
+- Validate all forms and user input.
+
+## Documentation
+- Update [`README.md`](mdc:frontend/README.md) with any major changes or new features.
+
+## Summary
+Following these rules will help maintain a clean, scalable, and bug-resistant frontend codebase.
+

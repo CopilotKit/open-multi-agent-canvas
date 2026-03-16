@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint:fix": "node lint-fix.js"
   },
   "dependencies": {
     "@copilotkit/react-core": "1.5.18",
@@ -15,7 +16,9 @@
     "@radix-ui/react-dialog": "^1.1.6",
     "@radix-ui/react-separator": "^1.1.2",
     "@radix-ui/react-slot": "^1.1.2",
+    "@radix-ui/react-tabs": "^1.1.9",
     "@radix-ui/react-tooltip": "^1.1.8",
+    "@sentry/nextjs": "^9.14.0",
     "@tanstack/react-query": "^5.66.0",
     "@tanstack/react-query-devtools": "^5.66.0",
     "@types/leaflet": "^1.9.16",
@@ -24,9 +27,10 @@
     "leaflet": "^1.9.4",
     "leaflet-defaulticon-compatibility": "^0.1.2",
     "lucide-react": "^0.474.0",
-    "next": "15.1.6",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "next": "15.3.1",
+    "next-themes": "^0.4.6",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "react-leaflet": "^5.0.0",
     "react-markdown": "^9.0.3",
     "tailwind-merge": "^3.0.1",
@@ -35,13 +39,20 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
     "cursor-tools": "latest",
     "eslint": "^9",
-    "eslint-config-next": "15.1.6",
+    "eslint-config-next": "15.3.1",
+    "eslint-plugin-react-hooks": "^5.2.0",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
+  },
+  "packageManager": "pnpm@10.9.0+sha512.0486e394640d3c1fb3c9d43d49cf92879ff74f8516959c235308f5a8f62e2e19528a65cdc2a3058f587cde71eba3d5b56327c8c33a97e4c4051ca48a10ca2d5f",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@sentry/cli"
+    ]
   }
 }

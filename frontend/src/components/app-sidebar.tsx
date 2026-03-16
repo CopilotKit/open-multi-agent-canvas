@@ -1,5 +1,9 @@
 "use client";
 
+import * as Dialog from "@radix-ui/react-dialog";
+import { Mail, User } from "lucide-react";
+import Image from "next/image";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -9,9 +13,6 @@ import {
   SidebarGroup,
   SidebarHeader,
 } from "@/components/ui/sidebar";
-import * as Dialog from "@radix-ui/react-dialog";
-import { Mail, User } from "lucide-react";
-import Image from "next/image";
 
 export function AppSidebar() {
   return (

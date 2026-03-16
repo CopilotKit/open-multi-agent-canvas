@@ -1,0 +1,10 @@
+{
+  "name": "kb-multi-agent-scripts",
+  "version": "1.0.0",
+  "description": "Scripts for KB Multi-Agent",
+  "private": true,
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.4",
+    "dotenv": "^16.5.0"
+  }
+}
