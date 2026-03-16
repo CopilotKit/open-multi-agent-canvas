@@ -8,6 +8,7 @@ import { CircleOff, Loader2, Settings } from "lucide-react";
 import { Suspense, useState } from "react";
 import { ChatWindow } from "./chat-window";
 import { MCPConfigModal } from "./mcp-config-modal";
+import AgentMonitor from "./agent-monitor";
 
 const getCurrentlyRunningAgent = (
   state: Array<{
@@ -104,6 +105,7 @@ export default function Canvas() {
       )}
       <div className="order-last md:order-first md:col-span-4 p-4 border-r h-screen overflow-y-auto">
         <ChatWindow />
+        <AgentMonitor />
       </div>
 
       <div className="order-first md:order-last md:col-span-8 bg-white p-8 overflow-y-auto">
