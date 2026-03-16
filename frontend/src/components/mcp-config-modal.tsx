@@ -80,6 +80,11 @@ export function MCPConfigModal({ isOpen, onClose }: MCPConfigModalProps) {
   const [url, setUrl] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [showAddServerForm, setShowAddServerForm] = useState(false);
+  const [errors, setErrors] = useState<{
+    serverName?: string;
+    command?: string;
+    url?: string;
+  }>({});
 
   // Calculate server statistics
   const totalServers = Object.keys(configs).length;
@@ -98,23 +103,60 @@ export function MCPConfigModal({ isOpen, onClose }: MCPConfigModalProps) {
   }, [agentState]);
 
   const addConfig = () => {
-    if (!serverName) return;
+    // Reset errors
+    setErrors({});
+    
+    // Validate inputs
+    const newErrors: {
+      serverName?: string;
+      command?: string;
+      url?: string;
+    } = {};
+    
+    if (!serverName.trim()) {
+      newErrors.serverName = "Server name is required";
+    } else if (configs[serverName.trim()]) {
+      newErrors.serverName = "Server name already exists";
+    }
+    
+    if (connectionType === "stdio" && !command.trim()) {
+      newErrors.command = "Command is required";
+    }
+    
+    if (connectionType === "sse") {
+      if (!url.trim()) {
+        newErrors.url = "URL is required";
+      } else {
+        try {
+          new URL(url.trim());
+        } catch {
+          newErrors.url = "Invalid URL format";
+        }
+      }
+    }
+    
+    // If there are errors, display them
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
 
+    const trimmedServerName = serverName.trim();
     const newConfig =
       connectionType === "stdio"
         ? {
-            command,
+            command: command.trim(),
             args: args.split(" ").filter((arg) => arg.trim() !== ""),
             transport: "stdio" as const,
           }
         : {
-            url,
+            url: url.trim(),
             transport: "sse" as const,
           };
 
     setConfigs({
       ...configs,
-      [serverName]: newConfig,
+      [trimmedServerName]: newConfig,
     });
 
     // Reset form
@@ -295,9 +337,12 @@ export function MCPConfigModal({ isOpen, onClose }: MCPConfigModalProps) {
                     type="text"
                     value={serverName}
                     onChange={(e) => setServerName(e.target.value)}
-                    className="w-full px-3 py-2 border rounded-md text-sm"
+                    className={`w-full px-3 py-2 border rounded-md text-sm ${errors.serverName ? 'border-red-500' : ''}`}
                     placeholder="e.g., api-service, data-processor"
                   />
+                  {errors.serverName && (
+                    <p className="mt-1 text-sm text-red-500">{errors.serverName}</p>
+                  )}
                 </div>
 
                 <div>
@@ -342,9 +387,12 @@ export function MCPConfigModal({ isOpen, onClose }: MCPConfigModalProps) {
                         type="text"
                         value={command}
                         onChange={(e) => setCommand(e.target.value)}
-                        className="w-full px-3 py-2 border rounded-md text-sm"
+                        className={`w-full px-3 py-2 border rounded-md text-sm ${errors.command ? 'border-red-500' : ''}`}
                         placeholder="e.g., python, node"
                       />
+                      {errors.command && (
+                        <p className="mt-1 text-sm text-red-500">{errors.command}</p>
+                      )}
                     </div>
                     <div>
                       <label className="block text-sm font-medium mb-1">
@@ -366,9 +414,12 @@ export function MCPConfigModal({ isOpen, onClose }: MCPConfigModalProps) {
                       type="text"
                       value={url}
                       onChange={(e) => setUrl(e.target.value)}
-                      className="w-full px-3 py-2 border rounded-md text-sm"
+                      className={`w-full px-3 py-2 border rounded-md text-sm ${errors.url ? 'border-red-500' : ''}`}
                       placeholder="e.g., http://localhost:8000/events"
                     />
+                    {errors.url && (
+                      <p className="mt-1 text-sm text-red-500">{errors.url}</p>
+                    )}
                   </div>
                 )}
 
