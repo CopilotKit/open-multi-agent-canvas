@@ -1,0 +1,129 @@
+/* Enhanced theme for Open Multi-Agent Canvas */
+
+:root {
+  /* Primary brand colors */
+  --brand-primary: 220 70% 50%;     /* Vibrant blue */
+  --brand-secondary: 280 60% 60%;   /* Purple */
+  --brand-accent: 160 70% 45%;      /* Teal */
+  --brand-neutral: 220 15% 20%;     /* Dark blue-gray */
+
+  /* UI colors */
+  --ui-background: 0 0% 100%;
+  --ui-foreground: 220 15% 20%;
+  --ui-card: 0 0% 100%;
+  --ui-card-foreground: 220 15% 20%;
+  --ui-popover: 0 0% 100%;
+  --ui-popover-foreground: 220 15% 20%;
+  --ui-primary: 220 70% 50%;
+  --ui-primary-foreground: 0 0% 100%;
+  --ui-secondary: 280 60% 60%;
+  --ui-secondary-foreground: 0 0% 100%;
+  --ui-muted: 220 15% 95%;
+  --ui-muted-foreground: 220 15% 40%;
+  --ui-accent: 160 70% 45%;
+  --ui-accent-foreground: 0 0% 100%;
+  --ui-destructive: 0 70% 50%;
+  --ui-destructive-foreground: 0 0% 100%;
+  --ui-border: 220 15% 90%;
+  --ui-input: 220 15% 90%;
+  --ui-ring: 220 70% 50%;
+
+  /* Sidebar specific colors */
+  --sidebar-background: 220 15% 20%;
+  --sidebar-foreground: 0 0% 100%;
+  --sidebar-primary: 220 70% 50%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 160 70% 45%;
+  --sidebar-accent-foreground: 0 0% 100%;
+  --sidebar-border: 220 15% 30%;
+  --sidebar-ring: 220 70% 50%;
+
+  /* Agent specific colors */
+  --agent-travel: 200 70% 50%;
+  --agent-research: 280 60% 60%;
+  --agent-mcp: 340 70% 50%;
+  --agent-knowledge: 160 70% 45%;
+
+  /* Animation durations */
+  --animation-fast: 150ms;
+  --animation-normal: 250ms;
+  --animation-slow: 350ms;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+}
+
+.dark {
+  /* UI colors for dark mode */
+  --ui-background: 220 15% 10%;
+  --ui-foreground: 0 0% 95%;
+  --ui-card: 220 15% 15%;
+  --ui-card-foreground: 0 0% 95%;
+  --ui-popover: 220 15% 15%;
+  --ui-popover-foreground: 0 0% 95%;
+  --ui-primary: 220 70% 50%;
+  --ui-primary-foreground: 0 0% 100%;
+  --ui-secondary: 280 60% 60%;
+  --ui-secondary-foreground: 0 0% 100%;
+  --ui-muted: 220 15% 20%;
+  --ui-muted-foreground: 220 15% 70%;
+  --ui-accent: 160 70% 45%;
+  --ui-accent-foreground: 0 0% 100%;
+  --ui-destructive: 0 70% 50%;
+  --ui-destructive-foreground: 0 0% 100%;
+  --ui-border: 220 15% 25%;
+  --ui-input: 220 15% 25%;
+  --ui-ring: 220 70% 50%;
+
+  /* Sidebar specific colors for dark mode */
+  --sidebar-background: 220 15% 15%;
+  --sidebar-foreground: 0 0% 95%;
+  --sidebar-primary: 220 70% 50%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 160 70% 45%;
+  --sidebar-accent-foreground: 0 0% 100%;
+  --sidebar-border: 220 15% 25%;
+  --sidebar-ring: 220 70% 50%;
+}
+
+/* Animation keyframes */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInLeft {
+  from { transform: translateX(-20px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(20px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+/* Utility classes */
+.animate-fade-in {
+  animation: fadeIn var(--animation-normal) ease-in-out;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft var(--animation-normal) ease-in-out;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight var(--animation-normal) ease-in-out;
+}
+
+.animate-pulse-subtle {
+  animation: pulse 2s infinite ease-in-out;
+}

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="600" fill="#F8FAFC"/>
+  <path d="M0 0H800V600H0V0Z" fill="#F1F5F9"/>
+  <path d="M100 100H700V500H100V100Z" fill="#E2E8F0"/>
+  
+  <!-- Grid lines -->
+  <path d="M100 150H700" stroke="#CBD5E1" stroke-width="1"/>
+  <path d="M100 200H700" stroke="#CBD5E1" stroke-width="1"/>
+  <path d="M100 250H700" stroke="#CBD5E1" stroke-width="1"/>
+  <path d="M100 300H700" stroke="#CBD5E1" stroke-width="1"/>
+  <path d="M100 350H700" stroke="#CBD5E1" stroke-width="1"/>
+  <path d="M100 400H700" stroke="#CBD5E1" stroke-width="1"/>
+  <path d="M100 450H700" stroke="#CBD5E1" stroke-width="1"/>
+  
+  <path d="M150 100V500" stroke="#CBD5E1" stroke-width="1"/>
+  <path d="M200 100V500" stroke="#CBD5E1" stroke-width="1"/>
+  <path d="M250 100V500" stroke="#CBD5E1" stroke-width="1"/>
+  <path d="M300 100V500" stroke="#CBD5E1" stroke-width="1"/>
+  <path d="M350 100V500" stroke="#CBD5E1" stroke-width="1"/>
+  <path d="M400 100V500" stroke="#CBD5E1" stroke-width="1"/>
+  <path d="M450 100V500" stroke="#CBD5E1" stroke-width="1"/>
+  <path d="M500 100V500" stroke="#CBD5E1" stroke-width="1"/>
+  <path d="M550 100V500" stroke="#CBD5E1" stroke-width="1"/>
+  <path d="M600 100V500" stroke="#CBD5E1" stroke-width="1"/>
+  <path d="M650 100V500" stroke="#CBD5E1" stroke-width="1"/>
+  
+  <!-- Roads -->
+  <path d="M200 150C200 150 250 200 300 250C350 300 400 350 450 300C500 250 550 200 600 250C650 300 700 350 750 400" stroke="#94A3B8" stroke-width="3"/>
+  <path d="M100 300C100 300 150 300 200 300C250 300 300 300 350 300C400 300 450 300 500 300C550 300 600 300 650 300C700 300 750 300 800 300" stroke="#94A3B8" stroke-width="3"/>
+  <path d="M400 100C400 100 400 150 400 200C400 250 400 300 400 350C400 400 400 450 400 500" stroke="#94A3B8" stroke-width="3"/>
+  
+  <!-- Map pins -->
+  <circle cx="250" cy="200" r="8" fill="#3B82F6"/>
+  <circle cx="400" cy="300" r="10" fill="#EF4444"/>
+  <circle cx="550" cy="250" r="8" fill="#3B82F6"/>
+  <circle cx="300" cy="400" r="8" fill="#3B82F6"/>
+  <circle cx="600" cy="350" r="8" fill="#3B82F6"/>
+  
+  <!-- Map controls -->
+  <rect x="650" y="150" width="30" height="60" rx="4" fill="#FFFFFF" stroke="#CBD5E1"/>
+  <rect x="655" y="160" width="20" height="10" rx="2" fill="#94A3B8"/>
+  <rect x="655" y="180" width="20" height="10" rx="2" fill="#94A3B8"/>
+  
+  <!-- Scale -->
+  <rect x="150" y="450" width="100" height="10" rx="2" fill="#FFFFFF" stroke="#94A3B8"/>
+  <path d="M150 455H250" stroke="#94A3B8" stroke-width="1"/>
+  <path d="M150 450V460" stroke="#94A3B8" stroke-width="1"/>
+  <path d="M200 450V460" stroke="#94A3B8" stroke-width="1"/>
+  <path d="M250 450V460" stroke="#94A3B8" stroke-width="1"/>
+</svg>

@@ -1,5 +1,5 @@
 import Map from "@/components/map";
 
-export const TravelAgent = () => {
+export function TravelAgent() {
   return <Map />;
-};
+}

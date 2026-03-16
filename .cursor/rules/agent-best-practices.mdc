@@ -1,0 +1,39 @@
+---
+description: Backend
+globs: 
+alwaysApply: false
+---
+# Agent Backend Best Practices Rule
+
+To ensure easy, non-breaking development in the agent backend (`/agent`), follow these guidelines:
+
+## Project Structure
+- The main agent logic is in .@`mcp_agent\agents.py`        
+- Add new agent logic or workflows as new nodes in the workflow graph.
+- Place supporting scripts (e.g., math server) in the agent directory (e.g., [`math_server.py`](mdc:agent/math_server.py)).
+
+## Extensibility
+- Use the `MCPConfig` pattern to add new tools or servers without modifying core logic.
+- Extend `AgentState` for new agent/team features, but keep backward compatibility.
+- Add new workflow nodes for advanced agent/team orchestration, not by modifying existing nodes.
+- For advanced memory, swap `MemorySaver` for a compatible memory backend (e.g., Mem0) in a non-breaking way.
+
+## Code Quality
+- Use type hints and TypedDict for all state/config structures.
+- Write docstrings for all functions and classes.
+- Use camelCase for variables and PascalCase for classes.
+- Prefer async/await for all agent logic.
+- Log tool and agent responses for debugging.
+
+## Backward Compatibility
+- Default to existing config and memory if new features/settings are not provided.
+- Never remove or rename existing config fields without a migration path.
+- Test all changes with existing agent workflows before merging.
+
+## Documentation
+- Update [`README.md`](mdc:agent/README.md) with any major changes or new features.
+- Document new tools, memory backends, or workflow nodes inline and in the README.
+
+## Summary
+Following these rules will help maintain a robust, extensible, and backward-compatible agent backend.
+
