@@ -34,7 +34,7 @@ Make sure you have:
 - [pnpm](https://pnpm.io/installation)
 
 ### 2. API Keys
-- [Copilot Cloud](https://cloud.copilotkit.ai)
+- [Copilot Cloud](https://dashboard.operations.copilotkit.ai)
 
 ## Running the Frontend
 
@@ -53,7 +53,7 @@ pnpm i
 
 
 
-Need a CopilotKit API key? Get one [here](https://cloud.copilotkit.ai/).
+Need a CopilotKit API key? Get one [here](https://dashboard.operations.copilotkit.ai/).
 
 Then, fire up the Next.js project:
 
